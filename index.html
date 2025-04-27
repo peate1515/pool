@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Pool de Prédiction 2025 - Élections Fédérales</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        fieldset {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="number"], input[type="time"] {
+            width: 120px;
+            margin-left: 10px;
+        }
+        #decompte {
+            font-weight: bold;
+            margin-top: 10px;
+            color: darkblue;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue sur le pool de prédiction 2025 des élections fédérales canadiennes !</h1>
+    <p>Voici les questions :</p>
+
+    <form action="https://formspree.io/f/xanonvzb" method="POST">
+        <!-- Question 1 -->
+        <fieldset>
+            <legend>Question 1 : Quel parti va gagner l'élection ?</legend>
+            <label><input type="radio" name="parti_gagnant" value="Parti Libéral" required> Parti Libéral</label>
+            <label><input type="radio" name="parti_gagnant" value="Parti Conservateur"> Parti Conservateur</label>
+            <label><input type="radio" name="parti_gagnant" value="Nouveau Parti Démocratique"> Nouveau Parti Démocratique</label>
+            <label><input type="radio" name="parti_gagnant" value="Bloc Québécois"> Bloc Québécois</label>
+            <label><input type="radio" name="parti_gagnant" value="Parti Vert"> Parti Vert</label>
+            <label><input type="radio" name="parti_gagnant" value="Parti Populisme"> Parti Populisme</label>
+        </fieldset>
+
+        <!-- Question 2 -->
+        <fieldset>
+            <legend>Question 2 : Le gouvernement sera ?</legend>
+            <label><input type="radio" name="type_gouvernement" value="Minoritaire" required> Minoritaire</label>
+            <label><input type="radio" name="type_gouvernement" value="Majoritaire"> Majoritaire</label>
+        </fieldset>
+
+        <!-- Question 3 -->
+        <fieldset>
+            <legend>Question 3 : Qui formera l'opposition officielle ?</legend>
+            <label><input type="radio" name="opposition_officielle" value="Parti Libéral" required> Parti Libéral</label>
+            <label><input type="radio" name="opposition_officielle" value="Parti Conservateur"> Parti Conservateur</label>
+            <label><input type="radio" name="opposition_officielle" value="Nouveau Parti Démocratique"> Nouveau Parti Démocratique</label>
+            <label><input type="radio" name="opposition_officielle" value="Bloc Québécois"> Bloc Québécois</label>
+            <label><input type="radio" name="opposition_officielle" value="Parti Vert"> Parti Vert</label>
+            <label><input type="radio" name="opposition_officielle" value="Parti Populisme"> Parti Populisme</label>
+        </fieldset>
+
+        <!-- Question 4 -->
+        <fieldset>
+            <legend>Question 4 : Qui va gagner dans Beauport–Limoilou ?</legend>
+            <label><input type="radio" name="gagnant_beauport" value="Parti Libéral" required> Parti Libéral</label>
+            <label><input type="radio" name="gagnant_beauport" value="Parti Conservateur"> Parti Conservateur</label>
+            <label><input type="radio" name="gagnant_beauport" value="Nouveau Parti Démocratique"> Nouveau Parti Démocratique</label>
+            <label><input type="radio" name="gagnant_beauport" value="Bloc Québécois"> Bloc Québécois</label>
+            <label><input type="radio" name="gagnant_beauport" value="Parti Vert"> Parti Vert</label>
+            <label><input type="radio" name="gagnant_beauport" value="Parti Populisme"> Parti Populisme</label>
+        </fieldset>
+
+        <!-- Question 5 -->
+        <fieldset>
+            <legend>Question 5 : À quelle heure sera annoncé le gouvernement ?</legend>
+            <input type="time" name="heure_annonce_gouvernement" required>
+        </fieldset>
+
+        <!-- Question 6 -->
+        <fieldset>
+            <legend>Question 6 : À quelle heure sera annoncé le type de gouvernement ?</legend>
+            <input type="time" name="heure_annonce_type_gouvernement" required>
+        </fieldset>
+
+        <!-- Question 7 -->
+        <fieldset>
+            <legend>Question 7 : Combien de chefs vont annoncer leur démission dans les 48h suivant l’élection ?</legend>
+            <input type="number" name="nombre_chefs_demission" min="0" required>
+        </fieldset>
+
+        <!-- Question 8 : Députés par parti -->
+        <fieldset>
+            <legend>Question 8 : Combien de députés par parti ? (maximum total : 338)</legend>
+
+            <label>Parti Libéral :
+                <input type="number" name="deputes_liberal" min="0" value="0" oninput="updateDecompte()">
+            </label>
+
+            <label>Parti Conservateur :
+                <input type="number" name="deputes_conservateur" min="0" value="0" oninput="updateDecompte()">
+            </label>
+
+            <label>Nouveau Parti Démocratique :
+                <input type="number" name="deputes_npd" min="0" value="0" oninput="updateDecompte()">
+            </label>
+
+            <label>Bloc Québécois :
+                <input type="number" name="deputes_bloc" min="0" value="0" oninput="updateDecompte()">
+            </label>
+
+            <label>Parti Vert :
+                <input type="number" name="deputes_vert" min="0" value="0" oninput="updateDecompte()">
+            </label>
+
+            <label>Parti Populisme :
+                <input type="number" name="deputes_populisme" min="0" value="0" oninput="updateDecompte()">
+            </label>
+
+            <div id="decompte">Nombre de députés restants : 338</div>
+        </fieldset>
+
+        <!-- Submit Button -->
+        <button type="submit">Envoyer mes prédictions</button>
+    </form>
+
+    <script>
+        function updateDecompte() {
+            const total = 338;
+            let somme = 0;
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                somme += parseInt(input.value) || 0;
+            });
+
+            const restant = total - somme;
+            const decompte = document.getElementById('decompte');
+
+            if (restant >= 0) {
+                decompte.textContent = `Nombre de députés restants : ${restant}`;
+                decompte.style.color = "darkblue";
+            } else {
+                decompte.textContent = `⚠️ Trop de députés placés ! (${restant} restants)`;
+                decompte.style.color = "red";
+            }
+        }
+    </script>
+
+</body>
+</html>
